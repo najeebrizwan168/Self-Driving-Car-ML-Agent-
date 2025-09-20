@@ -5,8 +5,8 @@ using UnityEngine;
 using Unity.MLAgents.Actuators;
 using System.Threading;
 using Unity.Mathematics;
+
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(MeshCollider))]
 [RequireComponent(typeof(DecisionRequester))]
 public class NNArea : Agent
 {
@@ -17,13 +17,19 @@ public class NNArea : Agent
         public float Barrier = -0.001f;
         public float car = -0.001f;
     }
-    public float Movespeed = 30f;
-    public float Turnspeed = 100f;
+    public float motorForce = 1500f;
+    public float maxSteerAngle = 30f;
     public RewardInfo rwd = new RewardInfo();
+
+    // Assign these in inspector
+    public WheelCollider frontLeftWheel;
+    public WheelCollider frontRightWheel;
+    public WheelCollider rearLeftWheel;
+    public WheelCollider rearRightWheel;
+
     private Rigidbody rb = null;
     private Vector3 Recall_position;
     private Quaternion Recall_rotation;
-    private Bounds bnd;
 
     public override void Initialize()
     {
@@ -31,83 +37,81 @@ public class NNArea : Agent
         rb.drag = 1;
         rb.angularDrag = 5;
         rb.interpolation = RigidbodyInterpolation.Extrapolate;
-        this.GetComponent<MeshCollider>().convex= true;
         this.GetComponent<DecisionRequester>().DecisionPeriod = 1;
-        bnd = this.GetComponent<MeshCollider>().bounds;
-        Recall_position=new Vector3 (this.transform.position.x,this.transform.position.y,this.transform.position.z);
-        Recall_rotation = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w); ;
+        Recall_position = transform.position;
+        Recall_rotation = transform.rotation;
     }
+
     public override void OnEpisodeBegin()
     {
         rb.velocity = Vector3.zero;
-        this.transform.position = Recall_position;
-        this.transform.rotation = Recall_rotation;
+        rb.angularVelocity = Vector3.zero;
+        transform.position = Recall_position;
+        transform.rotation = Recall_rotation;
     }
+
     public override void OnActionReceived(ActionBuffers actions)
     {
-        if (isWheelDown() == false) { return; }
-        float mag = rb.velocity.sqrMagnitude;
-
+        float move = 0f;
+        float steer = 0f;
         switch (actions.DiscreteActions.Array[0])
         {
-            case 0:
-                break;
-                case 1:
-                rb.AddRelativeForce(Vector3.back*Movespeed*Time.deltaTime,ForceMode.VelocityChange); 
-                break;
-                case 2:
-                rb.AddRelativeForce(Vector3.forward*Movespeed*Time.deltaTime, ForceMode.VelocityChange);
-                AddReward(mag * rwd.mult_forward);
-                break;
+            case 1: move = -1f; break; // Back
+            case 2: move = 1f; break;  // Forward
         }
         switch (actions.DiscreteActions.Array[1])
         {
-            case 0:
-                break;
-                case 1:
-                this.transform.Rotate(Vector3.up,-Turnspeed*Time.deltaTime);
-                break;
-                case 2:
-                this.transform.Rotate(Vector3.up,Turnspeed*Time.deltaTime);
-                break;
+            case 1: steer = -1f; break; // Left
+            case 2: steer = 1f; break;  // Right
+        }
+
+        ApplyMovement(move, steer);
+
+        // Reward for moving forward
+        if (move > 0)
+        {
+            AddReward(rb.velocity.magnitude * rwd.mult_forward);
         }
     }
+
+    private void ApplyMovement(float move, float steer)
+    {
+        float steerAngle = steer * maxSteerAngle;
+        float torque = move * motorForce;
+
+        frontLeftWheel.steerAngle = steerAngle;
+        frontRightWheel.steerAngle = steerAngle;
+
+        // Apply torque to rear wheels (common for FWD; adjust for AWD/RWD as needed)
+        rearLeftWheel.motorTorque = torque;
+        rearRightWheel.motorTorque = torque;
+    }
+
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         actionsOut.DiscreteActions.Array[0] = 0;
-        actionsOut.DiscreteActions.Array[1]= 0;
+        actionsOut.DiscreteActions.Array[1] = 0;
         float move = Input.GetAxis("Vertical");
         float turn = Input.GetAxis("Horizontal");
         if (move < 0)
-        {
             actionsOut.DiscreteActions.Array[0] = 1;
-        }
         else if (move > 0)
-        {
             actionsOut.DiscreteActions.Array[0] = 2;
-        }
-        if(turn < 0)
-        {
+        if (turn < 0)
             actionsOut.DiscreteActions.Array[1] = 1;
-        }
-        else if(turn > 0)
-        {
+        else if (turn > 0)
             actionsOut.DiscreteActions.Array[1] = 2;
-        }
     }
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Barrier") == true)
+        if (collision.gameObject.CompareTag("BarrierLeft") || collision.gameObject.CompareTag("BarrierRight"))
         {
             AddReward(rwd.Barrier);
         }
-        else if(collision.gameObject.CompareTag("Car")==true)
+        else if (collision.gameObject.CompareTag("Car"))
         {
             AddReward(rwd.car);
         }
-    }
-    private bool isWheelDown()
-    {
-        return Physics.Raycast(this.transform.position, -this.transform.up, bnd.size.y * 0.55f);
     }
 }
