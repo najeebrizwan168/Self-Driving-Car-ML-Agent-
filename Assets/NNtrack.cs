@@ -7,8 +7,9 @@ using System.Threading;
 using Unity.Mathematics;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(MeshCollider))]
 [RequireComponent(typeof(DecisionRequester))]
-public class NNArea : Agent
+public class NNtrack : Agent
 {
     [System.Serializable]
     public class RewardInfo
@@ -22,19 +23,17 @@ public class NNArea : Agent
     public float motorForce = 1500f;
     public float maxSteerAngle = 30f;
     public RewardInfo rwd = new RewardInfo();
+    private Rigidbody rb = null;
+    private Vector3 Recall_position;
+    public bool doEpisode = true;
+    private Quaternion Recall_rotation;
+    private Bounds bnd;
 
-    // Assign these in inspector
+    // Wheel Colliders (assign in Inspector)
     public WheelCollider frontLeftWheel;
     public WheelCollider frontRightWheel;
     public WheelCollider rearLeftWheel;
     public WheelCollider rearRightWheel;
-
-    private Rigidbody rb = null;
-    private Vector3 Recall_position;
-    private Quaternion Recall_rotation;
-
-    // Optionally expose doEpisode in Inspector
-    public bool doEpisode = true;
 
     public override void Initialize()
     {
@@ -42,36 +41,30 @@ public class NNArea : Agent
         rb.drag = 1;
         rb.angularDrag = 5;
         rb.interpolation = RigidbodyInterpolation.Extrapolate;
+        this.GetComponent<MeshCollider>().convex = true;
         this.GetComponent<DecisionRequester>().DecisionPeriod = 1;
-        Recall_position = transform.position;
-        Recall_rotation = transform.rotation;
+        bnd = this.GetComponent<MeshCollider>().bounds;
+        Recall_position = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
+        Recall_rotation = new Quaternion(this.transform.rotation.x, this.transform.rotation.y, this.transform.rotation.z, this.transform.rotation.w); ;
     }
-
     public override void OnEpisodeBegin()
     {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        transform.position = Recall_position;
-        transform.rotation = Recall_rotation;
+        this.transform.position = Recall_position;
+        this.transform.rotation = Recall_rotation;
+        ResetWheelColliders();
     }
-
     public override void OnActionReceived(ActionBuffers actions)
     {
+        if (!isWheelDown()) { return; }
         float move = 0f;
         float steer = 0f;
+
         switch (actions.DiscreteActions.Array[0])
         {
-            case 0:
-                AddReward(rwd.nomovement); // Penalty for no movement
-                break;
-            case 1:
-                move = -1f;
-                AddReward(rwd.back);       // Penalty for moving backward
-                break;
-            case 2:
-                move = 1f;
-                AddReward(rb.velocity.magnitude * rwd.mult_forward); // Reward for moving forward
-                break;
+            case 1: move = -1f; break; // Back
+            case 2: move = 1f; break;  // Forward
         }
         switch (actions.DiscreteActions.Array[1])
         {
@@ -80,6 +73,22 @@ public class NNArea : Agent
         }
 
         ApplyMovement(move, steer);
+
+        // Reward for moving forward
+        if (move > 0)
+        {
+            AddReward(rb.velocity.magnitude * rwd.mult_forward);
+        }
+        // Penalty for no movement
+        if (move == 0)
+        {
+            AddReward(rwd.nomovement);
+        }
+        // Penalty for moving back
+        if (move < 0)
+        {
+            AddReward(rwd.back);
+        }
     }
 
     private void ApplyMovement(float move, float steer)
@@ -92,6 +101,17 @@ public class NNArea : Agent
 
         rearLeftWheel.motorTorque = torque;
         rearRightWheel.motorTorque = torque;
+    }
+
+    private void ResetWheelColliders()
+    {
+        frontLeftWheel.motorTorque = 0f;
+        frontRightWheel.motorTorque = 0f;
+        rearLeftWheel.motorTorque = 0f;
+        rearRightWheel.motorTorque = 0f;
+
+        frontLeftWheel.steerAngle = 0f;
+        frontRightWheel.steerAngle = 0f;
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -115,12 +135,22 @@ public class NNArea : Agent
         if (collision.gameObject.CompareTag("BarrierLeft") || collision.gameObject.CompareTag("BarrierRight"))
         {
             AddReward(rwd.Barrier);
-            if (doEpisode) EndEpisode();
+            if (doEpisode)
+            {
+                EndEpisode();
+            }
         }
         else if (collision.gameObject.CompareTag("Car"))
         {
             AddReward(rwd.car);
-            if (doEpisode) EndEpisode(); 
+            if (doEpisode)
+            {
+                EndEpisode();
+            }
         }
+    }
+    private bool isWheelDown()
+    {
+        return Physics.Raycast(this.transform.position, -this.transform.up, bnd.size.y * 0.55f);
     }
 }
