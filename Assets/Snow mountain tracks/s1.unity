@@ -326,8 +326,8 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 200000
-  motorForce: 1500
+  MaxStep: 0
+  motorForce: 2000
   maxSteerAngle: 30
   rwd:
     nomovement: -0.1
@@ -339,7 +339,7 @@ MonoBehaviour:
   frontRightWheel: {fileID: 172850475}
   rearLeftWheel: {fileID: 172850474}
   rearRightWheel: {fileID: 172850473}
-  doEpisode: 1
+  doEpisode: 0
 --- !u!114 &172850478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,7 +358,7 @@ MonoBehaviour:
   - BarrierLeft
   - BarrierRight
   m_RaysPerDirection: 9
-  m_MaxRayDegrees: 78
+  m_MaxRayDegrees: 92
   m_SphereCastRadius: 0.5
   m_RayLength: 50
   m_RayLayerMask:
@@ -391,10 +391,10 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 1fa3a1f0f91a0fd4fbba7fce64ef5280, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: Track1
+  m_BehaviorName: Track03
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -639,8 +639,8 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 200000
-  motorForce: 1500
+  MaxStep: 0
+  motorForce: 2000
   maxSteerAngle: 30
   rwd:
     nomovement: -0.1
@@ -652,7 +652,7 @@ MonoBehaviour:
   frontRightWheel: {fileID: 185139947}
   rearLeftWheel: {fileID: 185139946}
   rearRightWheel: {fileID: 185139945}
-  doEpisode: 1
+  doEpisode: 0
 --- !u!114 &185139950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -671,7 +671,7 @@ MonoBehaviour:
   - BarrierLeft
   - BarrierRight
   m_RaysPerDirection: 9
-  m_MaxRayDegrees: 78
+  m_MaxRayDegrees: 92
   m_SphereCastRadius: 0.5
   m_RayLength: 50
   m_RayLayerMask:
@@ -704,10 +704,10 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 1fa3a1f0f91a0fd4fbba7fce64ef5280, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: Track1
+  m_BehaviorName: Track03
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -1122,8 +1122,8 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 200000
-  motorForce: 1500
+  MaxStep: 0
+  motorForce: 2000
   maxSteerAngle: 30
   rwd:
     nomovement: -0.1
@@ -1135,7 +1135,7 @@ MonoBehaviour:
   frontRightWheel: {fileID: 356643132}
   rearLeftWheel: {fileID: 356643131}
   rearRightWheel: {fileID: 356643130}
-  doEpisode: 1
+  doEpisode: 0
 --- !u!114 &356643135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1154,7 +1154,7 @@ MonoBehaviour:
   - BarrierLeft
   - BarrierRight
   m_RaysPerDirection: 9
-  m_MaxRayDegrees: 78
+  m_MaxRayDegrees: 92
   m_SphereCastRadius: 0.5
   m_RayLength: 50
   m_RayLayerMask:
@@ -1187,10 +1187,10 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 1fa3a1f0f91a0fd4fbba7fce64ef5280, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: Track1
+  m_BehaviorName: Track03
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -1678,8 +1678,8 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 200000
-  motorForce: 1500
+  MaxStep: 0
+  motorForce: 2000
   maxSteerAngle: 30
   rwd:
     nomovement: -0.1
@@ -1691,7 +1691,7 @@ MonoBehaviour:
   frontRightWheel: {fileID: 814471188}
   rearLeftWheel: {fileID: 814471187}
   rearRightWheel: {fileID: 814471186}
-  doEpisode: 1
+  doEpisode: 0
 --- !u!114 &814471191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1710,7 +1710,7 @@ MonoBehaviour:
   - BarrierLeft
   - BarrierRight
   m_RaysPerDirection: 9
-  m_MaxRayDegrees: 78
+  m_MaxRayDegrees: 92
   m_SphereCastRadius: 0.5
   m_RayLength: 50
   m_RayLayerMask:
@@ -1743,10 +1743,10 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 1fa3a1f0f91a0fd4fbba7fce64ef5280, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: Track1
+  m_BehaviorName: Track03
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -2009,7 +2009,7 @@ MonoBehaviour:
   - BarrierLeft
   - BarrierRight
   m_RaysPerDirection: 9
-  m_MaxRayDegrees: 78
+  m_MaxRayDegrees: 92
   m_SphereCastRadius: 0.5
   m_RayLength: 50
   m_RayLayerMask:
@@ -2045,7 +2045,7 @@ MonoBehaviour:
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: Track02
+  m_BehaviorName: Track03
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -2101,7 +2101,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 200000
+  MaxStep: 0
   motorForce: 2000
   maxSteerAngle: 30
   rwd:
@@ -2114,7 +2114,7 @@ MonoBehaviour:
   frontRightWheel: {fileID: 1195544515}
   rearLeftWheel: {fileID: 2141350178}
   rearRightWheel: {fileID: 1726683118}
-  doEpisode: 1
+  doEpisode: 0
 --- !u!146 &1726683118 stripped
 WheelCollider:
   m_CorrespondingSourceObject: {fileID: 1057494946909100755, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
@@ -2630,8 +2630,8 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 200000
-  motorForce: 1500
+  MaxStep: 0
+  motorForce: 2000
   maxSteerAngle: 30
   rwd:
     nomovement: -0.1
@@ -2643,7 +2643,7 @@ MonoBehaviour:
   frontRightWheel: {fileID: 2022854588}
   rearLeftWheel: {fileID: 2022854587}
   rearRightWheel: {fileID: 2022854586}
-  doEpisode: 1
+  doEpisode: 0
 --- !u!114 &2022854591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2662,7 +2662,7 @@ MonoBehaviour:
   - BarrierLeft
   - BarrierRight
   m_RaysPerDirection: 9
-  m_MaxRayDegrees: 78
+  m_MaxRayDegrees: 92
   m_SphereCastRadius: 0.5
   m_RayLength: 50
   m_RayLayerMask:
@@ -2695,10 +2695,10 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 1fa3a1f0f91a0fd4fbba7fce64ef5280, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: Track1
+  m_BehaviorName: Track03
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
